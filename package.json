@@ -1,0 +1,16 @@
+{
+  "name": "elastic_filter",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -R spec -u tdd test/tests/*.js"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "elasticsearch": "^3.0.2",
+    "lodash": "^2.4.1",
+    "mixdown-app": "^3.0.4"
+  },
+  "devDependencies": {},
+  "description": "Helper for making filtered search queries"
+}
