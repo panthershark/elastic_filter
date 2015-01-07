@@ -4,7 +4,7 @@ var _ = require('lodash');
 var elasticsearch = require('elasticsearch');
 var async = require('async');
 
-var create_elastic_client = function(elastic_options) {
+var create_elastic_client = function (elastic_options) {
 
   _.defaults(elastic_options, {
     host: "localhost:9200",
@@ -100,15 +100,15 @@ var rawSearch = {
 
 
 module.exports = BasePlugin.extend({
-  search: function(text, searchOptions, callback) {
+  search: function (text, searchOptions, callback) {
     var self = this;
 
-    if (arguments.length === 2 && typeof(searchOptions) === 'function') {
+    if (arguments.length === 2 && typeof (searchOptions) === 'function') {
       callback = searchOptions;
       searchOptions = {};
     }
 
-    if (typeof(callback) !== 'function') {
+    if (typeof (callback) !== 'function') {
       throw new Error('Callback not defined.');
     }
 
@@ -150,11 +150,11 @@ module.exports = BasePlugin.extend({
         query.filtered.query.query_string.query = text;
 
       }
+    }
 
-      // check search options and remove the active filter if searchOptions asked for it to be turned off.
-      if (searchOptions.active === false) {
-        delete query.filtered.filter;
-      }
+    // check search options and remove the active filter if searchOptions asked for it to be turned off.
+    if (searchOptions.active === false) {
+      delete query.filtered.filter;
     }
 
     if (searchOptions.filters) {
@@ -174,7 +174,7 @@ module.exports = BasePlugin.extend({
     //Only return back the ids
     searchOptions.result_fields = searchOptions.result_fields || [];
 
-    self.rawSearch(query, searchOptions, function(rawSearchErr, data) {
+    self.rawSearch(query, searchOptions, function (rawSearchErr, data) {
       if (rawSearchErr) {
         callback(rawSearchErr);
         return; // THIS IS IMPORTANT
@@ -184,15 +184,15 @@ module.exports = BasePlugin.extend({
 
     });
   },
-  rawSearch: function(query, searchOptions, callback) {
+  rawSearch: function (query, searchOptions, callback) {
     var self = this;
 
-    if (arguments.length === 2 && typeof(searchOptions) === 'function') {
+    if (arguments.length === 2 && typeof (searchOptions) === 'function') {
       callback = searchOptions;
       searchOptions = {};
     }
 
-    if (typeof(callback) !== 'function') {
+    if (typeof (callback) !== 'function') {
       throw new Error('Callback not defined.');
     }
 
@@ -225,7 +225,7 @@ module.exports = BasePlugin.extend({
       search.body.sort = searchOptions.sort;
     }
 
-    self.elastic.search(search, function(err, data) {
+    self.elastic.search(search, function (err, data) {
       if (err) {
         callback(err);
         return;
@@ -235,12 +235,12 @@ module.exports = BasePlugin.extend({
         took: data.took,
         query: search,
         total: data.hits.total,
-        results: _.map(data.hits.hits, function(h) {
+        results: _.map(data.hits.hits, function (h) {
           var r = {
             __meta: _.omit(h, 'fields')
           };
 
-          _.each(h.fields, function(v, k) {
+          _.each(h.fields, function (v, k) {
             r[k] = Array.isArray(v) && v.length === 1 ? v[0] : v;
           });
 
@@ -252,7 +252,7 @@ module.exports = BasePlugin.extend({
 
     return search;
   },
-  _setup: function(done) {
+  _setup: function (done) {
     var elastic_options = this._options;
 
     // NOTE: "this" is the plugin itself.  no need to use the getter/setter here.  Only on the interface exposed to users.
@@ -261,13 +261,13 @@ module.exports = BasePlugin.extend({
     var setup_ops = [];
     var self = this;
 
-    setup_ops.push(function(cb) {
+    setup_ops.push(function (cb) {
       self.elastic.ping({
         requestTimeout: 10000
       }, cb);
     });
 
-    async.parallel(setup_ops, function(err) {
+    async.parallel(setup_ops, function (err) {
       if (err) {
         done(err);
         return;
