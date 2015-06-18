@@ -23,12 +23,14 @@ var noFields = {
   }
 };
 
+//updated to use phrase_prefix instead of best_fields
+//as typical search intuition is prefix matching
 var queryTemplate = {
   "filtered": {
     "query": {
       "multi_match": {
         "query": "this is a test",
-        "type": "best_fields",
+        "type": "phrase_prefix",
         "fields": null
       }
     },
