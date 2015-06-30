@@ -20,6 +20,92 @@ var create_elastic_client = function (elastic_options) {
   return new elasticsearch.Client(_.pick(elastic_options, 'host', 'log', 'sniffInterval', 'sniffOnStart'));
 };
 
+<<<<<<< HEAD
+=======
+var noFields = {
+  "query_string": {
+    "query": "*"
+  }
+};
+
+//updated to use phrase_prefix instead of best_fields
+//as typical search intuition is prefix matching
+var queryTemplate = {
+  "filtered": {
+    "query": {
+      "multi_match": {
+        "query": "this is a test",
+        "type": "phrase_prefix",
+        "fields": null
+      }
+    },
+    "filter": {
+      "bool": {
+        "must": [{
+          "bool": {
+            "should": [{
+              "term": {
+                "active": true
+              }
+            }, {
+              "not": {
+                "filter": {
+                  "exists": {
+                    "field": "active"
+                  }
+                }
+              }
+            }]
+          }
+        }]
+      }
+    },
+    "strategy": "leap_frog"
+  }
+};
+
+var queryMatchAll = {
+  "filtered": {
+    "query": {
+      "query_string": {
+        "query": "*"
+      }
+    },
+    "filter": {
+      "bool": {
+        "must": [{
+          "bool": {
+            "should": [{
+              "term": {
+                "active": true
+              }
+            }, {
+              "not": {
+                "filter": {
+                  "exists": {
+                    "field": "active"
+                  }
+                }
+              }
+            }]
+          }
+        }]
+      }
+    },
+    "strategy": "leap_frog"
+  }
+};
+
+
+var rawSearch = {
+  "query": null,
+  "from": 0,
+  "size": 10,
+  "sort": [],
+  "version": true
+};
+
+>>>>>>> 7064ae40d2f27df2dc6d66d4e56368d8e5b29dfe
 
 module.exports = BasePlugin.extend({
   //the primary method which does everything
