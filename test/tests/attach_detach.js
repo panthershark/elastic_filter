@@ -2,10 +2,10 @@ var App = require('mixdown-app').App;
 var YourPlugin = require('../../index.js');
 var assert = require('assert');
 
-suite('Attach/Detach', function() {
+suite('Attach/Detach', function () {
   var app = new App();
 
-  setup(function(done) {
+  setup(function (done) {
 
     // create plugin
     var p = new YourPlugin({
@@ -17,15 +17,16 @@ suite('Attach/Detach', function() {
     });
 
     // attach it
-    app.use(p, 'foo');
+    app.use(p, 'es_plugin');
 
     app.setup(done);
   });
 
-  test('Attach & Detach', function(done) {
-    assert.equal(typeof(app.foo), 'object', 'Interface should exist');
+  test('Attach & Detach', function (done) {
+    assert.equal(typeof (app.es_plugin), 'object', 'Interface should exist');
     app.remove('foo');
     assert.equal(app.foo, null, 'Interface is removed');
     done();
   });
+
 });
